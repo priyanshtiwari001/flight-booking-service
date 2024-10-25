@@ -5,6 +5,7 @@ const {SeverConfig} = require('./config');
 
 
 app.use('/api',apiRoutes);
+// /api/v1/info
 
 
 app.listen(SeverConfig.PORT,()=>{
