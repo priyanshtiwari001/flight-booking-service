@@ -126,3 +126,28 @@
 
    - Crash Recovery 
       - It recovers from any crashes by checking the Logs.
+
+
+
+Race Condition - 
+   - when two or more enitities tried to access the same resources.
+   -  To Avoid -> we can make the serialize isolation or repeatable isolation
+   - BUT BUT mysql provide also a LOCKING MACHANISM to avoid race condition
+      - Shared locks -> this allows multiple txns to read data at a same time but restricts any of them from writing.
+      - Exclusive lock -> this prevents the txns from reading or writing the same data at the same time.
+      - Intent lock - This is used to specifies that a txn is planning to read and write the certain section of data.
+      - Row level lock - This allows txns to lock only a specific group.
+
+
+
+--> MYSQL -> MVCC(mutli version con-currency control database.)
+   - It is compatiable to allow mutliple txns to write and read the same data without much conflicts.??
+   - Every txn in mysql is sort of capture the data . It is about to modify at the start of txn and write the changes to an entirely different version of data. This allows txn to continue working to the original data without conflicts.
+
+
+
+   Booking service
+      - Pessimistic concurrency control -> isolation use krte h jase serialize taki txn goes one by another.
+      - Optimistic concurrency control -> check dalte h agr ye condition hui to ye krege other wise txn rollback krege.
+
+

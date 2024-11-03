@@ -4,8 +4,14 @@ const apiRoutes = require('./routes');
 const {SeverConfig} = require('./config');
 
 
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+
 app.use('/api',apiRoutes);
 // /api/v1/info
+
+
 
 
 app.listen(SeverConfig.PORT,()=>{
