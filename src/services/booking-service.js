@@ -99,7 +99,7 @@ async function cancelBooking(bookingId){
       await bookingRepo.update(bookingId, {status: CANCELLED}, transaction);
       await transaction.commit();
 
-      
+
     } catch (error) {
         console.log(error);
         transaction.rollback();
@@ -107,7 +107,22 @@ async function cancelBooking(bookingId){
     }
 }
 
+
+async function cancelOldBooking(){
+console.log('inside service');
+    try {
+        const time = new Date(Date.now() - 1000*60*5); // after 5 min ago
+    console.log(time);
+    const cancelBooking = await bookingRepo.cancelOldBooking(time);
+    return cancelBooking;
+    } catch (error) {
+        console.log(error);   
+    }
+    
+}
+
 module.exports={
     creatingBooking,
-    makePayment
+    makePayment,
+    cancelOldBooking
 }
