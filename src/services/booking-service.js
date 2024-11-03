@@ -49,11 +49,14 @@ async function makePayment(data){
         if(bookingDetails.status == CANCELLED){
             throw new AppErrors('the booking is expired',StatusCodes.BAD_REQUEST);
         }
-        
-        const bookingTime = new Date(bookingDetails.createdAt);
+
+        const bookingTime = new Date(bookingDetails.createdAt); 
         const currentTime = new Date();
-        if(currentTime - bookingTime > 300000){ // if time is exceed more than 5 mins then we cancelled the booking payment
-            await bookingRepo.update(data.bookingId,{status:CANCELLED},transaction);
+        console.log(currentTime - bookingTime);
+        if(currentTime - bookingTime > 300000){ // if time is exceed more than 5 mins then we cancelled the booking payment. Also difference is calcuated in milliseconds -> 
+            // 5 min x 60 sec x 1000 millisecond --> 300000 milliseconds
+           
+            await cancelBooking(data.bookingId);
             throw new AppErrors('The booking has expired', StatusCodes.BAD_REQUEST);
         }
 
@@ -71,8 +74,37 @@ async function makePayment(data){
     } catch (error) {
         console.log(error);
         transaction.rollback();
-        throw  Error;
+        throw  error;
     } 
+}
+
+
+async function cancelBooking(bookingId){
+    const transaction = await db.sequelize.transaction();
+    try {
+        const bookingDetails = await bookingRepo.get(bookingId,transaction);
+        console.log(bookingDetails);
+
+        // if already cancelled 
+        if(bookingDetails.status == CANCELLED){
+          await transaction.commit();
+          return true;
+        }
+
+      await axios.patch(`${SeverConfig.FLIGHT_SERVICE}/api/v1/flights/${bookingDetails.flightId}/seats`,{
+        seats:bookingDetails.noOfSeats,
+        dec:0
+      })
+
+      await bookingRepo.update(bookingId, {status: CANCELLED}, transaction);
+      await transaction.commit();
+
+      
+    } catch (error) {
+        console.log(error);
+        transaction.rollback();
+        throw error;
+    }
 }
 
 module.exports={

@@ -1,4 +1,4 @@
-const {StatusCodes, INTERNAL_SERVER_ERROR, OK} = require('http-status-codes')
+const {StatusCodes} = require('http-status-codes')
 const {BookingService} = require('../services')
 const {ErrorResponse,SuccessResponse} = require('../utils/common');
 
@@ -18,9 +18,10 @@ console.log(req.body);
 
         return res.status(StatusCodes.CREATED).json(SuccessResponse)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         ErrorResponse.error=error;
-        return res.status(INTERNAL_SERVER_ERROR).json(ErrorResponse)
+        console.log(ErrorResponse);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse)
     }
 
 }
@@ -34,11 +35,13 @@ async function makePayment(req,res){
         })
         SuccessResponse.data=response;
 
-        return res.status(OK).json(SuccessResponse);
+        return res.status(StatusCodes.OK).json(SuccessResponse);
     } catch (error) {
-        console.log(error);
-        ErrorResponse.error = error;
-        return res.status(INTERNAL_SERVER_ERROR).json(ErrorResponse);
+        console.log(
+            ErrorResponse
+        );
+        ErrorResponse.error=error;
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
     }
 }
 
