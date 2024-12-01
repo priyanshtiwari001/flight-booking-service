@@ -1,12 +1,20 @@
 const {ErrorResponse,SuccessResponse} = require('../utils/common');
-const st = require('http-status-codes');
+const {StatusCodes} = require('http-status-codes');
+
+
 function infoGet(req,res){
   try {
-    return res.status(st.OK).json(SuccessResponse);
+console.log('req recieved')
+    return res.status(st.OK).json({
+      success: true,
+      message: 'Booking API is live',
+      error: {},
+      data: {},
+    });
   } catch (error) {
 // console.log(error);
     ErrorResponse.error=error;
-    return res.status(st.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
   }
    
 }

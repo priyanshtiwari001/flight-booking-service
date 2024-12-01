@@ -1,7 +1,8 @@
 const express = require('express');
+
 const app = express();
 const apiRoutes = require('./routes');
-const {SeverConfig} = require('./config');
+const {SeverConfig,Queue} = require('./config');
 const CronJobs = require('./utils/common/cron-jobs');
 
 
@@ -14,7 +15,9 @@ app.use('/api',apiRoutes);
 
 
 
-app.listen(SeverConfig.PORT,()=>{
+app.listen(SeverConfig.PORT,async ()=>{
     console.log(`Port is successfully running on ${SeverConfig.PORT}`);
 //    CronJobs();
+await Queue.connectQueue();
+console.log("queue connected");
 })

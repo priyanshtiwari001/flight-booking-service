@@ -151,3 +151,8 @@ Race Condition -
       - Optimistic concurrency control -> check dalte h agr ye condition hui to ye krege other wise txn rollback krege.
 
 
+
+
+Impotent operation
+   - When a req is retransmitted or retried with no additional effects.
+   - ex: we req to create a bank account. but due to failure or some error or some network issue, account bangya server main but client ko response ni mila to vo retry but we have only a acc. right so here Impotent means agr jo req kra h uske ek hi acc bane do na bane
